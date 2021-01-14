@@ -1,10 +1,7 @@
 
-// informações importantes.
-// div{ponto}{className}
-// o {;} significa que temos um split de finds no cheerio
 
-//considerar parametro de busca.
-const sites = [
+
+let produtos = [
     {
         name: "boadica",
         host: "https://www.boadica.com.br",
@@ -16,8 +13,7 @@ const sites = [
             description: "div.col-md-4.center",
             link: "div.col-md-4.center;div.no-mobile;a"
         },
-        incrementPage: 1,
-        numberOfPage: 5
+        numberPages: 1
     },
     {
         name: "boadica-busca",
@@ -31,8 +27,7 @@ const sites = [
             description: "p.especificacao.block-with-text",
             link: "div.col-md-10;h3.titulo;a"
         },
-        incrementPage: 1,
-        numberOfPage: 5
+        numberPages: 5
     },
     {
         name: "olx",
@@ -42,8 +37,7 @@ const sites = [
             name: "h2.OLXad-list-title",
             price: "p.OLXad-list-price"
         },
-        incrementPage: 1,
-        numberOfPage: 5
+        numberPages: 5
     },
     {
         name: "buscape",
@@ -53,8 +47,7 @@ const sites = [
             name: "div.card--product__name.u-truncate-multiple-line",
             price: "span.price--big.bui-price__value"
         },
-        incrementPage: 1,
-        numberOfPage: 5
+        numberPages: 5
     },
     {
         name: "mercadolivre",
@@ -64,10 +57,9 @@ const sites = [
             name: "span.main-title",
             price : "div.item__price"
         },
-        incrementPage: 1,
-        numberOfPage: 5
+        numberPages: 5
     },
 
 ];
 
-exports.sites = sites;
+exports.produtos = produtos;
