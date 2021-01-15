@@ -54,4 +54,16 @@ router.post('/retrivie',async (request,
 });
 
 
+router.post('/test',async (request,
+                                        response) => {
+
+    logger.info("request to: " + request.url);
+
+    let list = await itemService.testPayload(request.body);
+
+    response.status(200).send(list)
+
+});
+
+
 app.use("/", router);

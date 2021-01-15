@@ -32,3 +32,36 @@ payload exemplo:
 },
 "numberPages": 1
 }
+
+
+
+classe não tem espaço, então substituir por ponto
+
+{
+"name": "americanas",
+"host": "https://www.americanas.com.br/",
+"page": "",
+"content": "div.src__ProductContainer-sc-7qsif4-3.cFwTod",
+"item": {
+"name": "span.src__Text-sc-154pg0p-0.product__ProductName-vep9u6-9.iryANd"
+},
+"numberPages": 1
+}
+
+
+
+==> entender melhor a mecanica de busca para melhorar
+os inputs do payload
+$('.apple', '#fruits').text();
+//=> Apple
+
+$('ul .pear').attr('class');
+//=> pear
+
+$('li[class=orange]').html();
+//=> Orange   
+    
+
+continuar testando para diferentes tipos de inputs
+
+    

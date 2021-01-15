@@ -5,8 +5,13 @@ import requestPromise from 'request-promise';
 import linkService from './link';
 import priceService from './price';
 
-function buildPage(payload, numberOfPage) {
-    return  payload.host.concat(payload.page).replace('{page}', numberOfPage);
+
+function buildUrl(payload) {
+    return  payload.host.concat(payload.page);
+}
+
+function addPage(url, numberOfPage) {
+    return  url.replace('{page}', numberOfPage);
 }
 
 function clean(element){
@@ -18,11 +23,8 @@ async function getItems(url, payload){
     let responseHtml = await requestPromise(url);
     let $ = cheerio.load(responseHtml);
 
-    let list = [];
-
     let content = payload.content;
     let itemData = payload.item;
-
 
     let promiseList = $(content).map( async (idx, el) => {
 
@@ -43,13 +45,10 @@ async function getItems(url, payload){
                 }
             }
 
-            //espera
             return item;
     });
 
-
-    let volta = await Promise.all(promiseList);
-    return volta;
+    return await Promise.all(promiseList);
 }
 
 async function getByPages(payload){
@@ -59,7 +58,9 @@ async function getByPages(payload){
 
     while(i <= payload.numberPages){
 
-        let url = buildPage(payload, i);
+        let url = buildUrl(payload)
+            url = addPage(url, i);
+
         let items = await getItems(url, payload);
         list.push(items);
 
@@ -69,10 +70,37 @@ async function getByPages(payload){
     return list;
 }
 
+async function testPayload(payload){
+
+    let url = buildUrl(payload)
+
+    let responseHtml = await requestPromise(url);
+    let $ = cheerio.load(responseHtml);
+
+    let content = payload.content;
+    let itemData = payload.item;
+
+    let promiseList = $(content).map( async (idx, el) => {
+
+        let $el = $(el);
+
+        let find = await $el.find(itemData['name']);
+
+        console.log("--->", find);
+    })
+
+    return await Promise.all(promiseList);
+}
+
+
 module.exports = {
 
-    buildJson: async function(payload) {
-        return await getByPages(payload);
+    buildJson: function(payload) {
+        return getByPages(payload);
+    },
+
+    testPayload: function(payload){
+        return  testPayload(payload);
     }
 };
 

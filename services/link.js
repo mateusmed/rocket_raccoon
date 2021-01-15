@@ -11,11 +11,7 @@ async function buildLink(host, link, element){
 
     let href = $myEl.attr('href');
 
-
-    let volta = host.concat(href);
-    console.log(volta);
-
-    return volta;
+    return host.concat(href);
 }
 
 
