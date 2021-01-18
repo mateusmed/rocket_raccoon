@@ -21,6 +21,7 @@
     "cheerio": "^1.0.0-rc.3",
     "core-js": "^3.0.0-beta.11",
     "express": "^4.16.4",
+    "puppeteer": "^5.5.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
     "winston": "^3.2.1"

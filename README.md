@@ -65,3 +65,24 @@ $('li[class=orange]').html();
 continuar testando para diferentes tipos de inputs
 
     
+
+IMPORTANTE --> O CONTENT DEVE SER O A REFERENCIA PRO CARD DO ITEM
+EXEMPLO:
+
+<div id="lista">
+    <div id="card">
+        attr1
+        attr2
+    </div>
+
+    <div id="card2">
+        attr1
+        attr2
+    </div> ...
+</div>
+
+
+- Não funciona com sites SPA(angular,react )
+  por isso iniciei a abertura de um navegador, 
+  usando puppeteer.
+  

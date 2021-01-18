@@ -6,6 +6,9 @@ import linkService from './link';
 import priceService from './price';
 
 
+
+
+
 function buildUrl(payload) {
     return  payload.host.concat(payload.page);
 }
@@ -80,7 +83,7 @@ async function testPayload(payload){
     let content = payload.content;
     let itemData = payload.item;
 
-    let promiseList = $(content).map( async (idx, el) => {
+    $(content).each( async (idx, el) => {
 
         let $el = $(el);
 
