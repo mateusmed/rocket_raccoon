@@ -1,13 +1,43 @@
 // "use strict";
 import cheerio from 'cheerio';
 import requestPromise from 'request-promise';
-
+import puppeteer from 'puppeteer';
 import linkService from './link';
 import priceService from './price';
 
 
 
+async function getPageContent(payload){
 
+    let url = buildUrl(payload)
+
+    if(payload.browser){
+        return await requestPromiseBrowser(url);
+    }
+
+    return await requestPromise(url);
+}
+
+
+async function requestPromiseBrowser(url){
+
+    let browser = await puppeteer.launch({
+        headless: false, // não mostrar o navegador, default -> true
+        executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
+    });
+
+    const page = await browser.newPage();
+
+    //entender melhor essa opção de espera
+    //'load' | 'domcontentloaded' | 'networkidle0' | 'networkidle2';
+    await page.goto(url ,{ waitUntil: 'networkidle0' });
+
+    let pageContent = await page.content();
+
+    await browser.close();
+
+    return pageContent;
+}
 
 function buildUrl(payload) {
     return  payload.host.concat(payload.page);
@@ -75,24 +105,43 @@ async function getByPages(payload){
 
 async function testPayload(payload){
 
-    let url = buildUrl(payload)
-
-    let responseHtml = await requestPromise(url);
+    let responseHtml = await getPageContent(payload);
     let $ = cheerio.load(responseHtml);
 
     let content = payload.content;
     let itemData = payload.item;
 
-    $(content).each( async (idx, el) => {
+
+    let listItens = [];
+
+    console.log("====================");
+    console.log("itens no content: " , $(content).length);
+
+    for(let el of $(content)){
 
         let $el = $(el);
+        let item = {};
 
-        let find = await $el.find(itemData['name']);
+        console.log("itens no element: " , $el);
 
-        console.log("--->", find);
-    })
+        for (let nameAttribute in itemData) {
 
-    return await Promise.all(promiseList);
+            if(nameAttribute === "price"){
+                item[nameAttribute] = await priceService.regexRealPrice(clean($el.find(itemData[nameAttribute]).text()));
+
+            }else if(nameAttribute === "link"){
+
+                item[nameAttribute] = await linkService.buildLink(payload.host, itemData[nameAttribute], $el);
+            }else{
+
+                item[nameAttribute] = clean($el.find(itemData[nameAttribute]).text())
+            }
+        }
+
+        listItens.push(item);
+    }
+
+    return listItens;
 }
 
 

@@ -60,7 +60,13 @@ $('ul .pear').attr('class');
 
 $('li[class=orange]').html();
 //=> Orange   
-    
+
+li[class=orange]
+
+
+"content": "table[height=\"4298\"] tbody",
+
+
 
 continuar testando para diferentes tipos de inputs
 
@@ -85,4 +91,17 @@ EXEMPLO:
 - Não funciona com sites SPA(angular,react )
   por isso iniciei a abertura de um navegador, 
   usando puppeteer.
-  
+
+
+
+{
+"browser": true,
+"name": "motoclub",
+"host": "https://www.revistamotoclubes.com.br/",
+"page": "/Motoclubes/Motoclubes_rj.htm",
+"content": "td[height=\"18\"]",
+"item": {
+"name": "td a"
+},
+"numberPages": 1
+}

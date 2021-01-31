@@ -11,7 +11,7 @@ async function simpleTestRequest(payload){
 
     try{
         let browser = await puppeteer.launch({
-            headless: false, // não mostrar o navegador, default -> true
+            headless: true, // não mostrar o navegador, default -> true
             executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
         });
 
