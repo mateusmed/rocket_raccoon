@@ -46,7 +46,6 @@ router.post('/retrivie',async (request,
 
         //filtrar se o payload está no formato adequado com o padrão determinado pelo sistema
 
-
         let list = await itemService.buildJson(request.body);
 
         response.status(200).send(list)

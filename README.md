@@ -61,6 +61,9 @@ $('ul .pear').attr('class');
 $('li[class=orange]').html();
 //=> Orange   
 
+
+
+
 li[class=orange]
 
 
@@ -105,3 +108,19 @@ EXEMPLO:
 },
 "numberPages": 1
 }
+
+
+input example: OLX
+{
+"name": "olx",
+"host": "https://rj.olx.com.br",
+"page": "/rio-de-janeiro-e-regiao/computadores-e-acessorios?q=gforce",
+"content": "li.sc-1fcmfeb-2.juiJqh",
+"item": {
+"name": "h2.sc-1iuc9a2-1.daMDOK.sc-ifAKCX.eKQLlb",
+"price": "div.sc-hmzhuo.sc-1iuc9a2-7.CYgas.sc-jTzLTM.iwtnNi",
+"link": "a"
+},
+"numberPages": 1
+}
+

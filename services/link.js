@@ -11,6 +11,10 @@ async function buildLink(host, link, element){
 
     let href = $myEl.attr('href');
 
+    if(href !== undefined && href.includes(host)){
+        return href;
+    }
+
     return host.concat(href);
 }
 

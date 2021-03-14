@@ -106,11 +106,11 @@ async function getByPages(payload){
 async function testPayload(payload){
 
     let responseHtml = await getPageContent(payload);
+
     let $ = cheerio.load(responseHtml);
 
     let content = payload.content;
     let itemData = payload.item;
-
 
     let listItens = [];
 
@@ -121,8 +121,6 @@ async function testPayload(payload){
 
         let $el = $(el);
         let item = {};
-
-        console.log("itens no element: " , $el);
 
         for (let nameAttribute in itemData) {
 
