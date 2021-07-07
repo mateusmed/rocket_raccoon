@@ -95,7 +95,7 @@ async function getByPages(payload){
             url = addPage(url, i);
 
         let items = await getItems(url, payload);
-        list.push(items);
+        list.push(...items);
 
         i++;
     }

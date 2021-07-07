@@ -18,14 +18,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 // ==========================================================
 
-const PORT = 5000;
+const PORT = 3090;
 
 app.listen(PORT, () => {
-    console.log(`server running on port ${PORT}`)
+    console.log(`Rocket Raccon is running on port ${PORT}`)
 });
 
 
-router.get('/health', (request,
+router.get('/healthcheck', (request,
                                    response) => {
 
     logger.info("request to: " + request.url);
@@ -39,8 +39,8 @@ router.get('/health', (request,
 });
 
 
-router.post('/retrivie',async (request,
-                                     response) => {
+router.post('/retrivie', async (request,
+                               response) => {
 
         logger.info("request to: " + request.url);
 
@@ -53,8 +53,8 @@ router.post('/retrivie',async (request,
 });
 
 
-router.post('/test',async (request,
-                                        response) => {
+router.post('/test', async (request,
+                           response) => {
 
     logger.info("request to: " + request.url);
 
