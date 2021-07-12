@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 const PORT = 3090;
 
 app.listen(PORT, () => {
-    console.log(`Rocket Raccon is running on port ${PORT}`)
+    console.log(`[Rocket Raccon] is running on port ${PORT}`)
 });
 
 
