@@ -2,7 +2,7 @@
   "name": "rocket_raccoon",
   "version": "1.0.0",
   "description": "To steal that guy's leg",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
     "test": "test"
   },
