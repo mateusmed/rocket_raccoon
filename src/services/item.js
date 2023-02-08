@@ -118,7 +118,14 @@ async function testPayload(payload){
     console.log("====================");
     console.log("itens no content: " , $(content).length);
 
-    for(let el of $(content)){
+    if($(content).length === 0){
+        console.log("content não encontrado");
+        return listItens;
+    }
+
+    let elementList = $(content);
+
+    for(let el of elementList){
 
         let $el = $(el);
         let item = {};
@@ -126,11 +133,17 @@ async function testPayload(payload){
         for (let nameAttribute in itemData) {
 
             if(nameAttribute === "price"){
-                item[nameAttribute] = await priceService.regexRealPrice(clean($el.find(itemData[nameAttribute]).text()));
+
+                let found = $el.find(itemData[nameAttribute]);
+                if(found){
+                    let price = clean(found.text());
+                    item[nameAttribute] = await priceService.regexRealPrice(price);
+                }
 
             }else if(nameAttribute === "link"){
 
                 item[nameAttribute] = await linkService.buildLink(payload.host, itemData[nameAttribute], $el);
+
             }else{
 
                 item[nameAttribute] = clean($el.find(itemData[nameAttribute]).text())
