@@ -9,7 +9,7 @@ import priceService from './price';
 
 async function getPageContent(payload){
 
-    let url = buildUrl(payload)
+    let url = buildUrl(payload);
 
     if(payload.browser){
         return await requestPromiseBrowser(url);
@@ -106,6 +106,7 @@ async function getByPages(payload){
 async function testPayload(payload){
 
     let responseHtml = await getPageContent(payload);
+    console.log("==================== responseHtml", responseHtml);
 
     let $ = cheerio.load(responseHtml);
 

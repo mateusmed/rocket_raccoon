@@ -25,8 +25,7 @@ app.listen(PORT, () => {
 });
 
 
-router.get('/healthcheck', (request,
-                                   response) => {
+router.get('/health', (request, response) => {
 
     logger.info("request to: " + request.url);
 
@@ -39,8 +38,7 @@ router.get('/healthcheck', (request,
 });
 
 
-router.post('/retrivie', async (request,
-                               response) => {
+router.post('/retrivie', async (request, response) => {
 
         logger.info("request to: " + request.url);
 
@@ -53,8 +51,7 @@ router.post('/retrivie', async (request,
 });
 
 
-router.post('/test', async (request,
-                           response) => {
+router.post('/test', async (request, response) => {
 
     logger.info("request to: " + request.url);
 
