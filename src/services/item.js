@@ -44,7 +44,12 @@ function buildUrl(payload) {
 }
 
 function addPage(url, numberOfPage) {
-    return  url.replace('{page}', numberOfPage);
+
+    if(url.includes("{page}")){
+        return url.replace('{page}', numberOfPage);
+    }
+
+
 }
 
 function clean(element){
@@ -59,6 +64,12 @@ async function getItems(url, payload){
     let content = payload.content;
     let itemData = payload.item;
 
+
+    if($(content).length === 0){
+        console.log("content is not found, check your payload");
+        return [];
+    }
+
     let promiseList = $(content).map( async (idx, el) => {
 
             let $el = $(el);
@@ -67,14 +78,26 @@ async function getItems(url, payload){
             for (let nameAttribute in itemData) {
 
                 if(nameAttribute === "price"){
-                    item[nameAttribute] = await priceService.regexRealPrice(clean($el.find(itemData[nameAttribute]).text()));
+
+                    let found = $el.find(itemData[nameAttribute]);
+
+                    if(found){
+                        let price = clean(found.text());
+                        item[nameAttribute] = await priceService.regexRealPrice(price);
+                    }
 
                 }else if(nameAttribute === "link"){
 
                     item[nameAttribute] = await linkService.buildLink(payload.host, itemData[nameAttribute], $el);
+
                 }else{
 
-                    item[nameAttribute] = clean($el.find(itemData[nameAttribute]).text())
+                    let found = $el.find(itemData[nameAttribute]);
+
+                    if(found){
+
+                        item[nameAttribute] = clean(found.text())
+                    }
                 }
             }
 
@@ -87,12 +110,13 @@ async function getItems(url, payload){
 async function getByPages(payload){
 
     let list = [];
-    let i = 1; //incremente pages
+    let i = payload.startPage;
 
-    while(i <= payload.numberPages){
+    while(i <= payload.endPage){
 
-        let url = buildUrl(payload)
-            url = addPage(url, i);
+        let url = buildUrl(payload);
+
+        url = addPage(url, i);
 
         let items = await getItems(url, payload);
         list.push(...items);
@@ -135,6 +159,7 @@ async function testPayload(payload){
             if(nameAttribute === "price"){
 
                 let found = $el.find(itemData[nameAttribute]);
+
                 if(found){
                     let price = clean(found.text());
                     item[nameAttribute] = await priceService.regexRealPrice(price);
@@ -146,7 +171,12 @@ async function testPayload(payload){
 
             }else{
 
-                item[nameAttribute] = clean($el.find(itemData[nameAttribute]).text())
+                let found = $el.find(itemData[nameAttribute]);
+
+                if(found){
+
+                    item[nameAttribute] = clean(found.text())
+                }
             }
         }
 

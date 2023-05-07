@@ -135,3 +135,19 @@ input example: OLX
     }
 ```
 
+```
+curl --location --request POST 'http://localhost:3090/test' \
+--header 'Content-Type: application/json' \
+--data-raw ' {
+        "name": "olx_RJ - RX",
+        "host": "https://rj.olx.com.br",
+        "page": "/computadores-e-acessorios/pecas-e-acessorios?q=RX",
+        "content": "li.sc-1fcmfeb-2.dvcyfD",
+        "item": {
+            "name": "h2.kgl1mq-0.eFXRHn.sc-ifAKCX.iUMNkO",
+            "price": "div.sc-1kn4z61-1.dGMPPn",
+            "link": "a"
+        },
+        "numberPages": 1
+    }'
+```
