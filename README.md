@@ -1,29 +1,13 @@
 
+###  SE ESTÁ NA INTERNET É PUBLICO
 
-SE ESTÁ NA INTERNET É PUBLICO
+--- 
 
-informações importantes.
-
-```
-div{ponto}{className}
-o {;} significa que temos um split de finds no cheerio
-então, sempre que queremos uma div, dentro de uma div, usamos assim:
-div.col-md-4.center;div.no-mobile;a
-```
-
-
-{page} -> pagina da URL
-
-
-todo:
-```
-Gerar um arquivo de download para imagens, pensar em um parametro
-```
-
-payload exemplo:
+Esse é um exemplo de payload:
 
 ```
 {
+    "browser": true,
     "name": "boadica",
     "host": "https://www.boadica.com.br",
     "page": "/pesquisa/compu_notebook/precos?ClasseProdutoX=1&CodCategoriaX=2&XT=2&XE=6&XJ=5&curpage={page}",
@@ -38,116 +22,121 @@ payload exemplo:
 }
 ```
 
+---
 
-classe não tem espaço, então substituir por ponto
+### BROWSER - SPA
+
+O comando:
 
 ```
-{
-    "name": "americanas",
-    "host": "https://www.americanas.com.br/",
-    "page": "",
-    "content": "div.src__ProductContainer-sc-7qsif4-3.cFwTod",
-    "item": {
-        "name": "span.src__Text-sc-154pg0p-0.product__ProductName-vep9u6-9.iryANd"
-    },
-    "numberPages": 1
-}
+"browser": true,
 ```
+
+significa que o programa abrirá um navegador devido a tecnologia SPA \
+aguardando a pagina renderizar para depois fazer o scraping
+
+
 
 ---
 
-ESTUDO
+### PAGINAÇÃO
 
-==> entender melhor a mecanica de busca para melhorar os inputs do payload
-
-```
-$('.apple', '#fruits').text();
-//=> Apple
-
-$('ul .pear').attr('class');
-//=> pear
-
-$('li[class=orange]').html();
-//=> Orange   
-
-
-li[class=orange]
-
-"content": "table[height=\"4298\"] tbody",
+O host  será concatenado com a pagina ao fazer a requisição:
 
 ```
+host + page
+```
 
-
-continuar testando para diferentes tipos de inputs
-
-    
-
-IMPORTANTE --> O CONTENT DEVE SER O A REFERENCIA PRO CARD DO ITEM
-EXEMPLO:
-
-<div id="lista">
-    <div id="card">
-        attr1
-        attr2
-    </div>
-
-    <div id="card2">
-        attr1
-        attr2
-    </div> ...
-</div>
-
-
-- Não funciona com sites SPA(angular,react )
-  por isso iniciei a abertura de um navegador, 
-  usando puppeteer.
-
+se sua pagina tem o identificador de paginação adicionar a seguinte tag:
 
 ```
-    {
-        "browser": true,
-        "name": "motoclub",
-        "host": "https://www.revistamotoclubes.com.br/",
-        "page": "/Motoclubes/Motoclubes_rj.htm",
-        "content": "td[height=\"18\"]",
-        "item": {
-            "name": "td a"
-        },
-        "numberPages": 1
-    }
+{page}
+```
+
+conforme o examplo:
+```
+"/pesquisa/compu_notebook/precos?ClasseProdutoX=1&CodCategoriaX=2&XT=2&XE=6&XJ=5&curpage={page}",
+```
+
+o parametro:
+
+```
+"numberPages": 1
+```
+
+indica o numero de loops que acontecerá para trazer os dados, \
+incrementando o numero de pagina até atingir o limite do "numberPages"
+
+---
+### CONTENT
+
+no parametro "content":
+
+```
+"content": "div.row.preco.detalhe",
 ```
 
 
-input example: OLX
+Você deve buscar a tag da linha da lista que deseja filtar.
 
+Inpecione o elemento, e click com o botão direito:
 ```
-    {
-        "name": "olx",
-        "host": "https://rj.olx.com.br",
-        "page": "/rio-de-janeiro-e-regiao/computadores-e-acessorios?q=gforce",
-        "content": "li.sc-1fcmfeb-2.juiJqh",
-        "item": {
-            "name": "h2.sc-1iuc9a2-1.daMDOK.sc-ifAKCX.eKQLlb",
-            "price": "div.sc-hmzhuo.sc-1iuc9a2-7.CYgas.sc-jTzLTM.iwtnNi",
-            "link": "a"
-        },
-        "numberPages": 1
-    }
+copy -> copy selector
+```
+Você obterá alguma coisa parecida com:
+```
+#ngb-nav-0-panel > div:nth-child(1)
 ```
 
+Remova a variação de "loop", da seguinte forma:
+
 ```
-curl --location --request POST 'http://localhost:3090/test' \
---header 'Content-Type: application/json' \
---data-raw ' {
-        "name": "olx_RJ - RX",
-        "host": "https://rj.olx.com.br",
-        "page": "/computadores-e-acessorios/pecas-e-acessorios?q=RX",
-        "content": "li.sc-1fcmfeb-2.dvcyfD",
-        "item": {
-            "name": "h2.kgl1mq-0.eFXRHn.sc-ifAKCX.iUMNkO",
-            "price": "div.sc-1kn4z61-1.dGMPPn",
-            "link": "a"
-        },
-        "numberPages": 1
-    }'
+#ngb-nav-0-panel > div
 ```
+
+assim o sistema vai buscar todas as tags no mesmo padrão.
+
+---
+
+### ITEM
+
+O parametro item, significa exatamente a lista de objetos jsons \
+que você vai receber como resposta caso o scraping tenha tido sucesso.
+
+Não existem limites para o numero de atributos aplicados aqui.
+```
+"item": {
+        "name": "div.pull-left",
+        "price": "div.col-md-1.preco",
+        "description": "div.col-md-4.center",
+        "link": "div.col-md-4.center;div.no-mobile;a"
+},
+```
+
+Existe rotinas específicas para 
+```
+- price
+- link
+```
+Nada a se preocupar
+
+
+---
+
+### REGRAS:
+
+- classes CSS não tem espaço, então substituir por ponto
+exemplo:
+
+antes:
+```
+div.src__ProductContainer-sc-7qsif4-3 cFwTod
+```
+
+depois: (adicao do ponto no lugar do espaço)
+
+```
+div.src__ProductContainer-sc-7qsif4-3.cFwTod
+```
+
+--- 

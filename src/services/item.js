@@ -23,7 +23,9 @@ async function requestPromiseBrowser(url){
 
     let browser = await puppeteer.launch({
         headless: false, // não mostrar o navegador, default -> true
-        executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
+
+        executablePath: 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
+        // executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
     });
 
     const page = await browser.newPage();
@@ -131,6 +133,9 @@ async function testPayload(payload){
 
     let responseHtml = await getPageContent(payload);
     console.log("==================== responseHtml", responseHtml);
+
+    //todo checar o status code
+    // responseHtml;
 
     let $ = cheerio.load(responseHtml);
 
