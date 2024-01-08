@@ -7,6 +7,28 @@ import priceService from './price';
 
 
 
+
+
+async function getByPages(payload){
+
+    let list = [];
+    let i = payload.startPage;
+
+    while(i <= payload.endPage){
+
+        let url = buildUrl(payload);
+
+        url = addPage(url, i);
+
+        let items = await getItems(url, payload);
+        list.push(...items);
+
+        i++;
+    }
+
+    return list;
+}
+
 async function getPageContent(payload){
 
     let url = buildUrl(payload);
@@ -22,9 +44,21 @@ async function getPageContent(payload){
 async function requestPromiseBrowser(url){
 
     let browser = await puppeteer.launch({
-        headless: false, // não mostrar o navegador, default -> true
+        headless: true, // não mostrar o navegador, default -> true
+        args: [
+            '--no-sandbox',
+            '--disable-infobars',
+            '--disable-extensions',
+            '--disable-dev-shm-usage',
+            '--disable-gpu',
+            '--no-first-run',
+            '--disable-background-networking',
+            '--disable-default-apps',
+            '--disable-translate',
+            '--disable-sync',
+        ],
 
-        executablePath: 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
+        // executablePath: 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
         // executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
     });
 
@@ -50,8 +84,6 @@ function addPage(url, numberOfPage) {
     if(url.includes("{page}")){
         return url.replace('{page}', numberOfPage);
     }
-
-
 }
 
 function clean(element){
@@ -60,7 +92,7 @@ function clean(element){
 
 async function getItems(url, payload){
 
-    let responseHtml = await requestPromise(url);
+    let responseHtml = await getPageContent(payload);
     let $ = cheerio.load(responseHtml);
 
     let content = payload.content;
@@ -87,19 +119,18 @@ async function getItems(url, payload){
                         let price = clean(found.text());
                         item[nameAttribute] = await priceService.regexRealPrice(price);
                     }
+                    continue;
+                }
 
-                }else if(nameAttribute === "link"){
-
+                if(nameAttribute === "link"){
                     item[nameAttribute] = await linkService.buildLink(payload.host, itemData[nameAttribute], $el);
+                    continue;
+                }
 
-                }else{
+                let found = $el.find(itemData[nameAttribute]);
 
-                    let found = $el.find(itemData[nameAttribute]);
-
-                    if(found){
-
-                        item[nameAttribute] = clean(found.text())
-                    }
+                if(found){
+                    item[nameAttribute] = clean(found.text())
                 }
             }
 
@@ -109,87 +140,7 @@ async function getItems(url, payload){
     return await Promise.all(promiseList);
 }
 
-async function getByPages(payload){
 
-    let list = [];
-    let i = payload.startPage;
-
-    while(i <= payload.endPage){
-
-        let url = buildUrl(payload);
-
-        url = addPage(url, i);
-
-        let items = await getItems(url, payload);
-        list.push(...items);
-
-        i++;
-    }
-
-    return list;
-}
-
-async function testPayload(payload){
-
-    let responseHtml = await getPageContent(payload);
-    console.log("==================== responseHtml", responseHtml);
-
-    //todo checar o status code
-    // responseHtml;
-
-    let $ = cheerio.load(responseHtml);
-
-    let content = payload.content;
-    let itemData = payload.item;
-
-    let listItens = [];
-
-    console.log("====================");
-    console.log("itens no content: " , $(content).length);
-
-    if($(content).length === 0){
-        console.log("content não encontrado");
-        return listItens;
-    }
-
-    let elementList = $(content);
-
-    for(let el of elementList){
-
-        let $el = $(el);
-        let item = {};
-
-        for (let nameAttribute in itemData) {
-
-            if(nameAttribute === "price"){
-
-                let found = $el.find(itemData[nameAttribute]);
-
-                if(found){
-                    let price = clean(found.text());
-                    item[nameAttribute] = await priceService.regexRealPrice(price);
-                }
-
-            }else if(nameAttribute === "link"){
-
-                item[nameAttribute] = await linkService.buildLink(payload.host, itemData[nameAttribute], $el);
-
-            }else{
-
-                let found = $el.find(itemData[nameAttribute]);
-
-                if(found){
-
-                    item[nameAttribute] = clean(found.text())
-                }
-            }
-        }
-
-        listItens.push(item);
-    }
-
-    return listItens;
-}
 
 
 module.exports = {
@@ -199,7 +150,7 @@ module.exports = {
     },
 
     testPayload: function(payload){
-        return  testPayload(payload);
+        return  getByPages(payload);
     }
 };
 
