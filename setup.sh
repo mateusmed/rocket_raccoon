@@ -1,3 +1,4 @@
+#!/bin/bash
 whoami
 npm install
 cd src/
