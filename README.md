@@ -1,9 +1,36 @@
 
-###  SE ESTÁ NA INTERNET É PUBLICO
+
+<p align="center">
+  <img width="400" height="600" src="./doc/rocket.jpg">
+</p>
+
+
+<div align="center">
+    <h3>"Não há nada como eu, a não ser eu mesmo"</h3>
+    <h3> (Rocket Raccon) </h3>
+</div>
+
+
+
+
+The intention of this project, is get some information web page \
+like webScraping, but try to simplify way to retrivie data, \
+let's verify how we can configure and use this project,
+
+Tecnologies:
+```
+    - nodejs
+    - cheerio
+    - express
+    - puppeteer
+```
+
+
+###  IF ON IN THE INTERNET IS A PUBLIC THING
 
 --- 
 
-Esse é um exemplo de payload:
+This is a example of payload:
 
 ```
 {
@@ -18,7 +45,8 @@ Esse é um exemplo de payload:
         "description": "div.col-md-4.center",
         "link": "div.col-md-4.center;div.no-mobile;a"
     },
-    "numberPages": 1
+    "startPage": 1,
+    "endPage": 1
 }
 ```
 
@@ -26,84 +54,79 @@ Esse é um exemplo de payload:
 
 ### BROWSER - SPA
 
-O comando:
+The command:
 
 ```
 "browser": true,
 ```
 
-significa que o programa abrirá um navegador devido a tecnologia SPA \
-aguardando a pagina renderizar para depois fazer o scraping
-
+meaning the software will open a browser to load page on tecnologi SPA \
+waiting render to retrivied informaiton to do scraping
 
 
 ---
 
-### PAGINAÇÃO
+### PAGINATION
 
-O host  será concatenado com a pagina ao fazer a requisição:
+The "HOST" will be concatenated with "PAGE" to do request:
 
 ```
 host + page
 ```
 
-se sua pagina tem o identificador de paginação adicionar a seguinte tag:
+If your page make pagination by the url add this tag to will be increment:
 
 ```
 {page}
 ```
 
-conforme o examplo:
+by the example:
 ```
 "/pesquisa/compu_notebook/precos?ClasseProdutoX=1&CodCategoriaX=2&XT=2&XE=6&XJ=5&curpage={page}",
 ```
 
-o parametro:
+This parameter on body:
 
 ```
 "numberPages": 1
 ```
 
-indica o numero de loops que acontecerá para trazer os dados, \
-incrementando o numero de pagina até atingir o limite do "numberPages"
+Meaning the tag {page} will be incremented until the max "numberPages";
 
 ---
 ### CONTENT
 
-no parametro "content":
+The parameter "content":
 
 ```
 "content": "div.row.preco.detalhe",
 ```
 
-
-Você deve buscar a tag da linha da lista que deseja filtar.
-
-Inpecione o elemento, e click com o botão direito:
+You need to search the tag of line you want to filter.
+Inspect the element on html click rigth button:
 ```
 copy -> copy selector
 ```
-Você obterá alguma coisa parecida com:
+you will get something like:
 ```
 #ngb-nav-0-panel > div:nth-child(1)
 ```
 
-Remova a variação de "loop", da seguinte forma:
+Remove config identify "loop" id of item like:
 
 ```
 #ngb-nav-0-panel > div
 ```
 
-assim o sistema vai buscar todas as tags no mesmo padrão.
+Like this way the system will search many tags in the same pattern.
 
 ---
 
 ### ITEM
 
-O parametro item, significa exatamente a lista de objetos jsons \
-que você vai receber como resposta caso o scraping tenha tido sucesso.
+The parameter "item", meaning exactly the list of objects in json \
+you will be received the response something like this has success:
 
-Não existem limites para o numero de atributos aplicados aqui.
 ```
 "item": {
         "name": "div.pull-left",
@@ -112,31 +135,39 @@ Não existem limites para o numero de atributos aplicados aqui.
         "link": "div.col-md-4.center;div.no-mobile;a"
 },
 ```
+Don't exist limit to add parameter on the object "item"
 
-Existe rotinas específicas para 
+The code will be make a pattern to deal with like this attributes names:
 ```
 - price
 - link
 ```
-Nada a se preocupar
+Don't worry.
 
 
 ---
 
-### REGRAS:
+### SOME RULES OBSERVED:
 
-- classes CSS não tem espaço, então substituir por ponto
-exemplo:
+- the class CSS can't be complemented with space, you need to me replace by dot (.)
 
-antes:
+  example:
+
+before:
 ```
 div.src__ProductContainer-sc-7qsif4-3 cFwTod
 ```
 
-depois: (adicao do ponto no lugar do espaço)
+after: (add dot replacing space)
 
 ```
 div.src__ProductContainer-sc-7qsif4-3.cFwTod
 ```
 
 --- 
+
+### example of run and response:
+
+![request_example](./doc/postman1.png)
+
+![response_example](./doc/postman2.png)
